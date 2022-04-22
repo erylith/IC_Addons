@@ -18,6 +18,18 @@ Gui, ICScriptHub:Add, Text, x15 y+15, Ult. on this many Contracts Fulfilled:
 Gui, ICScriptHub:Add, Edit, vAzaka_Contracts x+5 w50, % g_AzakaSettings.NumContracts
 Gui, ICScriptHub:Add, Text, x+5 vAzaka_Contracts_Saved w200, % "Saved value: " . g_AzakaSettings.NumContracts
 
+if ( g_AzakaSettings.minContracts == "" )
+    g_AzakaSettings.minContracts := 20
+Gui, ICScriptHub:Add, Text, x15 y+15 Min. Contracts Fulfilled:
+Gui, ICScriptHub:Add, Edit, vAzaka_MinContracts x+5 w50, % g_AzakaSettings.NumContracts
+Gui, ICScriptHub:Add, Text, x+5 vAzaka_MinContracts_Saved w200, % "Saved value: " . g_AzakaSettings.MinContracts
+
+if ( g_AzakaSettings.SwaoContracts == "" )
+    g_AzakaSettings.SwapContracts := 45
+Gui, ICScriptHub:Add, Text, x15 y+15, Swap Freely in on this many Contracts Fulfilled:
+Gui, ICScriptHub:Add, Edit, vAzaka_SwapContracts x+5 w50, % g_AzakaSettings.SwapContracts
+Gui, ICScriptHub:Add, Text, x+5 vAzaka_SwapContracts_Saved w200, % "Saved value: " . g_AzakaSettings.SwapContracts
+
 if ( g_AzakaSettings.Loops == "" )
     g_AzakaSettings.Loops := 5
 Gui, ICScriptHub:Add, Text, x15 y+15, Ult. this many times:
@@ -144,12 +156,17 @@ class AzakaFarm
         num := this.omin.GetNumContractsFufilled()
         if (this.useGUI)
             GuiControl, % this.guiName, % this.guiControlIDcont, % "Current No. Contracts Fulfilled: " . num
+        if (num > this.minContracts AND num < this.swapContracts)
+        {
+            g_SF.DirectedInput(,, "{q}" )
+        }
         if (num > this.numContracts)
         {
             while (num > this.numContracts)
             {
                 num := this.omin.GetNumContractsFufilled()
                 g_SF.DirectedInput(,, this.inputs*)
+                g_SF.DirectedInput(,, "{w}" )
                 sleep, 100
             }
             return true
