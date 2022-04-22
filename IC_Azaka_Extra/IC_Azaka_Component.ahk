@@ -18,15 +18,15 @@ Gui, ICScriptHub:Add, Text, x15 y+15, Ult. on this many Contracts Fulfilled:
 Gui, ICScriptHub:Add, Edit, vAzaka_Contracts x+5 w50, % g_AzakaSettings.NumContracts
 Gui, ICScriptHub:Add, Text, x+5 vAzaka_Contracts_Saved w200, % "Saved value: " . g_AzakaSettings.NumContracts
 
-if ( g_AzakaSettings.minContracts == "" )
-    g_AzakaSettings.minContracts := 20
-Gui, ICScriptHub:Add, Text, x15 y+15 Min. Contracts Fulfilled:
-Gui, ICScriptHub:Add, Edit, vAzaka_MinContracts x+5 w50, % g_AzakaSettings.NumContracts
+if ( g_AzakaSettings.MinContracts == "" )
+    g_AzakaSettings.MinContracts := 5
+Gui, ICScriptHub:Add, Text, x15 y+15, Min. Contracts Fulfilled:
+Gui, ICScriptHub:Add, Edit, vAzaka_MinContracts x+5 w50, % g_AzakaSettings.MinContracts
 Gui, ICScriptHub:Add, Text, x+5 vAzaka_MinContracts_Saved w200, % "Saved value: " . g_AzakaSettings.MinContracts
 
-if ( g_AzakaSettings.SwaoContracts == "" )
-    g_AzakaSettings.SwapContracts := 45
-Gui, ICScriptHub:Add, Text, x15 y+15, Swap Freely in on this many Contracts Fulfilled:
+if ( g_AzakaSettings.SwapContracts == "" )
+    g_AzakaSettings.SwapContracts := 20
+Gui, ICScriptHub:Add, Text, x15 y+15, Swap Freely in before this many Contracts Fulfilled:
 Gui, ICScriptHub:Add, Edit, vAzaka_SwapContracts x+5 w50, % g_AzakaSettings.SwapContracts
 Gui, ICScriptHub:Add, Text, x+5 vAzaka_SwapContracts_Saved w200, % "Saved value: " . g_AzakaSettings.SwapContracts
 
@@ -121,6 +121,8 @@ class AzakaFarm
         }
         this.loops := settings.Loops
         this.numContracts := settings.NumContracts
+        this.swapContracts := settings.SwapContracts
+        this.minContracts := settings.MinContracts
         if IsObject(guiData)
         {
             this.useGUI := true
@@ -159,6 +161,7 @@ class AzakaFarm
         if (num > this.minContracts AND num < this.swapContracts)
         {
             g_SF.DirectedInput(,, "{q}" )
+            return false
         }
         if (num > this.numContracts)
         {
